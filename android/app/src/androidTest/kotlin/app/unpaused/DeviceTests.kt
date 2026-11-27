@@ -195,7 +195,7 @@ class UiDeviceTest {
         compose.waitUntil(10_000) { compose.onAllNodesWithText("NOW PLAYING").fetchSemanticsNodes().isNotEmpty() }
         Thread.sleep(1_500)
         shot("03-now-playing")
-        compose.onNodeWithText("AUDIO").performClick()
+        compose.onNodeWithText("AUDIO").performScrollTo().performClick()
         Thread.sleep(500)
         shot("04-audio-panel")
     }

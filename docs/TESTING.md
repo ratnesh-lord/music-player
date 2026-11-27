@@ -7,6 +7,7 @@
 | Core policy and logic (JVM) | Focus policy for all three modes, ReplayGain, quality labels, AIFF headers, LRC, track keys, sync merge, sleep timer, diagnostics verdicts | `android/core/src/test` | 46 tests |
 | Shared vectors | Kotlin and TypeScript produce identical results for the same inputs | `shared/test-vectors/*.json`, run by both suites above and below | 5 files |
 | Android glue (Robolectric) | Real `AudioManager` focus requests and callbacks, main-looper timers and ExoPlayer play/pause: Smart resumes once the other app is quiet, Standard waits, transient loss and gain, ducking, Mix never holds focus, a manual pause sticks | `android/app/src/test/.../AudioFocusControllerTest.kt` | 6 tests |
+| Android device (Android 15 emulator in CI) | The real playback service plays a file; a second audio-focus client ("another app") takes focus: Smart pauses then resumes after it lets go, Standard stays paused, Mix keeps playing. A UI run saves screenshots of onboarding, home and the player (printed in the job log) | `android/app/src/androidTest/.../DeviceTests.kt`, `android/scripts/run-instrumented.sh` | 4 tests |
 | Android lint | API-level guards, Compose rules, manifest | `./gradlew :app:lintDebug` | — |
 | Web unit | Same vectors in TypeScript, AIFF→WAV conversion | `web/tests` | 46 tests |
 | Web end-to-end (Playwright, Chromium) | Import files, honest quality panel, WAV playback, AIFF converted and played, library survives a reload | `web/e2e` | 2 tests |
@@ -18,8 +19,10 @@ cd android && ./gradlew :core:test :app:testDebugUnitTest :app:lintDebug
 cd web && npm ci && npm test && npm run build && npx playwright install chromium && npx playwright test
 ```
 
-What the automated tests can't show: how a real game, payment app or Nothing OS behaves. That is
-what the device protocol below is for.
+Device tests need an emulator or phone: `cd android && ./scripts/run-instrumented.sh`.
+
+What the automated tests can't show: how a real game, payment app or Nothing OS behaves (the
+emulator's "other app" is a test focus client). That is what the device protocol below is for.
 
 ## Device protocol (Nothing Phone (2a) or any Android phone)
 

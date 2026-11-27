@@ -122,7 +122,11 @@ class AudioFocusController(
         if (released) return
         val t = FocusPolicy.reduce(state, input)
         state = t.state
-        for (command in t.commands) execute(command)
+        // Log first, so the diagnostics read in cause-then-effect order even when a command
+        // (like a focus request) immediately produces further events.
+        val (logs, actions) = t.commands.partition { it is FocusCommand.Log }
+        for (command in logs) execute(command)
+        for (command in actions) execute(command)
         publish()
     }
 
