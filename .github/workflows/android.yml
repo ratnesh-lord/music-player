@@ -112,11 +112,15 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Playback, audio-focus and UI tests on an emulator
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          # Keep the emulated sound card (playback needs it) but send its output nowhere.
+          QEMU_AUDIO_DRV: none
         with:
           api-level: 35
           arch: x86_64
           target: google_apis
           disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back none
           working-directory: android
           script: ./scripts/run-instrumented.sh
       - name: Upload screenshots and reports

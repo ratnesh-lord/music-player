@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -72,8 +72,17 @@ private suspend fun MediaController.playFile(file: File) = withContext(Dispatche
     play()
 }
 
-private suspend fun MediaController.awaitPlaying(expected: Boolean, timeoutMs: Long) = withTimeout(timeoutMs) {
-    while (withContext(Dispatchers.Main) { isPlaying } != expected) delay(100)
+private suspend fun MediaController.awaitPlaying(expected: Boolean, timeoutMs: Long) {
+    val ok = withTimeoutOrNull(timeoutMs) {
+        while (withContext(Dispatchers.Main) { isPlaying } != expected) delay(100)
+        true
+    }
+    if (ok == null) {
+        val state = withContext(Dispatchers.Main) {
+            "state=$playbackState playWhenReady=$playWhenReady items=$mediaItemCount error=${playerError?.errorCodeName} ${playerError?.message}"
+        }
+        throw AssertionError("isPlaying never became $expected within $timeoutMs ms ($state)")
+    }
 }
 
 /** Acts as "another app" taking permanent audio focus, as a game or video app does. */
