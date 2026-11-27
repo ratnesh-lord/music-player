@@ -163,3 +163,8 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
+
+// Print each unit test's result in the CI log.
+tasks.withType<Test>().configureEach {
+    testLogging { events("passed", "skipped", "failed") }
+}
