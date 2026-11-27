@@ -644,6 +644,7 @@ class PlaybackService : MediaLibraryService() {
                         if (s.streamUrl.contains(".m3u8", ignoreCase = true)) mi.buildUpon().setMimeType(MimeTypes.APPLICATION_M3U8).build() else mi
                     }
                 }
+                item.requestMetadata.mediaUri != null -> out += item.buildUpon().setUri(item.requestMetadata.mediaUri).build()
                 item.localConfiguration != null -> out += item
                 !item.requestMetadata.searchQuery.isNullOrBlank() -> out += app.library.search(item.requestMetadata.searchQuery!!, 100).map { it.toMediaItem() }
             }

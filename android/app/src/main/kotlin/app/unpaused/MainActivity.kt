@@ -1,26 +1,40 @@
 package app.unpaused
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.OpenableColumns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import app.unpaused.core.focus.FocusMode
+import androidx.activity.viewModels
+import app.unpaused.ui.MainViewModel
+import app.unpaused.ui.UnpausedRoot
 
 class MainActivity : ComponentActivity() {
+
+    private val vm: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            Box(Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
-                Text("Unpaused — ${FocusMode.SMART}", color = Color.White)
+        super.onCreate(savedInstanceState)
+        setContent { UnpausedRoot(vm) }
+        if (savedInstanceState == null) handle(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handle(intent)
+    }
+
+    /** "Open with Unpaused" from a file manager: play that file directly. */
+    private fun handle(intent: Intent?) {
+        if (intent?.action != Intent.ACTION_VIEW) return
+        val uri = intent.data ?: return
+        val name = runCatching {
+            contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
+                if (c.moveToFirst()) c.getString(0) else null
             }
-        }
+        }.getOrNull()
+        vm.player.playUri(uri, name?.substringBeforeLast('.'))
     }
 }

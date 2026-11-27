@@ -8,6 +8,7 @@ import android.media.audiofx.DynamicsProcessing
 import android.media.audiofx.Equalizer
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import app.unpaused.data.settings.AppSettings
 import app.unpaused.data.settings.EqEngine
 import kotlin.math.sqrt
@@ -103,6 +104,7 @@ class AudioEffectsController(
         add("limiter")
     }.joinToString(" · ")
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun applyDynamics(c: EffectsConfig) {
         val gains = bandGains(c)
         val processor = dp ?: createDynamics().also { dp = it }
@@ -122,6 +124,7 @@ class AudioEffectsController(
         processor.setEnabled(true)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun createDynamics(): DynamicsProcessing {
         val config = DynamicsProcessing.Config.Builder(
             DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION,
