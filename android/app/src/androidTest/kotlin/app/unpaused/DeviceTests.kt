@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.session.MediaController
@@ -110,7 +111,7 @@ private suspend fun setMode(mode: FocusMode) {
 class PlaybackDeviceTest {
 
     @Test
-    fun smartModePausesForAnotherAppAndResumesWhenItIsDone() = runBlocking {
+    fun smartModePausesForAnotherAppAndResumesWhenItIsDone(): Unit = runBlocking {
         setMode(FocusMode.SMART)
         val c = controller()
         try {
@@ -128,7 +129,7 @@ class PlaybackDeviceTest {
     }
 
     @Test
-    fun mixModeKeepsPlayingWhenAnotherAppTakesFocus() = runBlocking {
+    fun mixModeKeepsPlayingWhenAnotherAppTakesFocus(): Unit = runBlocking {
         setMode(FocusMode.MIX)
         val c = controller()
         try {
@@ -146,7 +147,7 @@ class PlaybackDeviceTest {
     }
 
     @Test
-    fun standardModeStaysPausedAfterAnotherAppTakesFocus() = runBlocking {
+    fun standardModeStaysPausedAfterAnotherAppTakesFocus(): Unit = runBlocking {
         setMode(FocusMode.STANDARD)
         val c = controller()
         try {
@@ -184,8 +185,8 @@ class UiDeviceTest {
     fun launchesOnboardingHomePlayerAndSettings() {
         compose.waitUntil(10_000) { compose.onAllNodesWithText("A music player that keeps playing.").fetchSemanticsNodes().isNotEmpty() }
         shot("01-onboarding")
-        compose.onNodeWithText("SKIP FOR NOW").performClick()
-        compose.waitUntil(10_000) { compose.onAllNodesWithText("UNPAUSED").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText("SKIP FOR NOW").performScrollTo().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("WHEN OTHER APPS PLAY SOUND").fetchSemanticsNodes().isNotEmpty() }
         shot("02-home")
 
         runBlocking { controller().playFile(toneFile()) }

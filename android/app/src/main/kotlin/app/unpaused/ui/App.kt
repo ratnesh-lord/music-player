@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.Surface
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -103,11 +104,14 @@ private val tabs = listOf(Routes.HOME to "Home", Routes.LIBRARY to "Library", Ro
 fun UnpausedRoot(vm: MainViewModel) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     UnpausedTheme(settings.themeMode) {
-        val onboarded by vm.onboarded.collectAsStateWithLifecycle()
-        when (onboarded) {
-            null -> Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
-            false -> OnboardingScreen(vm)
-            true -> MainScaffold(vm)
+        // Surface sets the default content colour (onBackground) for every screen, including onboarding.
+        Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+            val onboarded by vm.onboarded.collectAsStateWithLifecycle()
+            when (onboarded) {
+                null -> Box(Modifier.fillMaxSize())
+                false -> OnboardingScreen(vm)
+                true -> MainScaffold(vm)
+            }
         }
     }
 }
