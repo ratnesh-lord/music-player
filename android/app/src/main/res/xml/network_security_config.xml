@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Many internet radio stations still stream over plain HTTP, and their hosts can't be listed in advance,
+  so cleartext is allowed. Everything else this app calls (Radio Browser, Supabase) is HTTPS-only by URL.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

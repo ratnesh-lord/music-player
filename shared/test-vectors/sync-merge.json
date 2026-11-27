@@ -1,0 +1,25 @@
+{
+  "description": "SyncMerge.plan(local, remote): last writer wins; equal times → tombstone wins, then larger deviceId.",
+  "cases": [
+    { "name": "new on each side",
+      "local": [ { "id": "a", "updatedAt": 10, "deleted": false, "deviceId": "phone" } ],
+      "remote": [ { "id": "b", "updatedAt": 5, "deleted": false, "deviceId": "web" } ],
+      "pull": ["b"], "push": ["a"] },
+    { "name": "newer remote wins, newer local wins, equal versions skipped",
+      "local": [ { "id": "a", "updatedAt": 10, "deleted": false, "deviceId": "phone" }, { "id": "b", "updatedAt": 30, "deleted": false, "deviceId": "phone" }, { "id": "c", "updatedAt": 7, "deleted": false, "deviceId": "web" } ],
+      "remote": [ { "id": "a", "updatedAt": 20, "deleted": false, "deviceId": "web" }, { "id": "b", "updatedAt": 25, "deleted": false, "deviceId": "web" }, { "id": "c", "updatedAt": 7, "deleted": false, "deviceId": "web" } ],
+      "pull": ["a"], "push": ["b"] },
+    { "name": "tombstone wins a tie",
+      "local": [ { "id": "x", "updatedAt": 100, "deleted": false, "deviceId": "zzz" } ],
+      "remote": [ { "id": "x", "updatedAt": 100, "deleted": true, "deviceId": "aaa" } ],
+      "pull": ["x"], "push": [] },
+    { "name": "larger device id breaks a full tie",
+      "local": [ { "id": "y", "updatedAt": 100, "deleted": false, "deviceId": "phone" } ],
+      "remote": [ { "id": "y", "updatedAt": 100, "deleted": false, "deviceId": "web" } ],
+      "pull": ["y"], "push": [] },
+    { "name": "local delete propagates",
+      "local": [ { "id": "z", "updatedAt": 50, "deleted": true, "deviceId": "phone" } ],
+      "remote": [ { "id": "z", "updatedAt": 40, "deleted": false, "deviceId": "web" } ],
+      "pull": [], "push": ["z"] }
+  ]
+}

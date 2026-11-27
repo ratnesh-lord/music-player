@@ -1,0 +1,25 @@
+{
+  "description": "LrcParser.parse and lineIndexAt. Times in ms.",
+  "cases": [
+    { "name": "basic synced with metadata and offset",
+      "text": "[ti:Song]\n[ar:Artist]\n[offset:+500]\n[00:01.00]First\n[00:05.50][00:20.000]Repeat\n[00:10]Third <00:10.50>word\n",
+      "synced": true, "title": "Song", "artist": "Artist",
+      "lines": [ [500, "First"], [5000, "Repeat"], [9500, "Third word"], [19500, "Repeat"] ],
+      "indexAt": [ [0, -1], [500, 0], [4999, 0], [5000, 1], [30000, 3] ] },
+    { "name": "plain lyrics keep section labels and blank lines",
+      "text": "\n[Chorus]\nLine one\n\nLine two\n\n",
+      "synced": false, "title": null, "artist": null,
+      "lines": [ [null, "[Chorus]"], [null, "Line one"], [null, ""], [null, "Line two"] ],
+      "indexAt": [ [1000, -1] ] },
+    { "name": "CRLF, BOM and colon-centiseconds",
+      "text": "﻿[00:00:50]A\r\n[01:02.3]B\r\n",
+      "synced": true, "title": null, "artist": null,
+      "lines": [ [500, "A"], [62300, "B"] ],
+      "indexAt": [ [62299, 0], [62300, 1] ] },
+    { "name": "negative offset delays lines",
+      "text": "[offset:-1000]\n[00:01.00]A",
+      "synced": true, "title": null, "artist": null,
+      "lines": [ [2000, "A"] ],
+      "indexAt": [ [1999, -1], [2000, 0] ] }
+  ]
+}

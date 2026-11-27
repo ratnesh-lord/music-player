@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Unpaused</string>
+
+    <!-- Notification / session buttons -->
+    <string name="action_favorite">Add to favourites</string>
+    <string name="action_unfavorite">Remove from favourites</string>
+    <string name="action_mix_on">Mix with other apps</string>
+    <string name="action_mix_off">Stop mixing with other apps</string>
+
+    <!-- Browse tree (Android Auto, Wear, other controllers) -->
+    <string name="browse_songs">Songs</string>
+    <string name="browse_albums">Albums</string>
+    <string name="browse_playlists">Playlists</string>
+    <string name="browse_favorites">Favourites</string>
 </resources>

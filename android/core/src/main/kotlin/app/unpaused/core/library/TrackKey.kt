@@ -10,10 +10,11 @@ import java.util.Locale
  */
 object TrackKey {
 
-    private val MARKS = Regex("""\p{M}+""")
-    private val NON_WORD = Regex("""[^\p{L}\p{N}]+""")
+    /** Only Latin-style combining accents (U+0300–U+036F); Indic vowel signs are kept. */
+    private val MARKS = Regex("""[̀-ͯ]+""")
+    private val NON_WORD = Regex("""[^\p{L}\p{M}\p{N}]+""")
 
-    /** Lower-case, accent-free, punctuation-free, single-spaced. */
+    /** Lower-case, accent-free (Latin), punctuation-free, single-spaced. */
     fun normalize(value: String?): String {
         if (value.isNullOrBlank()) return ""
         val decomposed = Normalizer.normalize(value, Normalizer.Form.NFKD)

@@ -1,0 +1,20 @@
+{
+  "description": "TrackKey.of(title, artist, album, durationMs) and TrackKey.sortKey(value). Kotlin: android/core TrackKey. TypeScript: web/src/lib/library/trackKey.ts. Both must produce exactly these outputs.",
+  "keys": [
+    { "title": "Tum Hi Ho", "artist": "Arijit Singh", "album": "Aashiqui 2", "durationMs": 262000, "key": "arijit singh|aashiqui 2|tum hi ho|131" },
+    { "title": "Halo!", "artist": "Beyoncé", "album": "I Am... Sasha Fierce", "durationMs": 261640, "key": "beyonce|i am sasha fierce|halo|131" },
+    { "title": "  Café  del   Mar ", "artist": "Energy 52", "album": null, "durationMs": 0, "key": "energy 52||cafe del mar|0" },
+    { "title": "ＦＵＬＬ　ＷＩＤＴＨ", "artist": "Ｔｅｓｔ", "album": "", "durationMs": 1000, "key": "test||full width|1" },
+    { "title": "Track (feat. X) [Remix]", "artist": "A & B", "album": "Vol. 1", "durationMs": 183000, "key": "a b|vol 1|track feat x remix|92" },
+    { "title": "तुम ही हो", "artist": "अरिजीत सिंह", "album": "आशिकी 2", "durationMs": 262000, "key": "अरिजीत सिंह|आशिकी 2|तुम ही हो|131" },
+    { "title": "İstanbul", "artist": "ÆON", "album": "Ørsted", "durationMs": 59999, "key": "æon|ørsted|istanbul|30" },
+    { "title": null, "artist": null, "album": null, "durationMs": null, "key": "|||0" }
+  ],
+  "sortKeys": [
+    { "value": "The Beatles", "sortKey": "beatles" },
+    { "value": "A Tribe Called Quest", "sortKey": "tribe called quest" },
+    { "value": "The", "sortKey": "the" },
+    { "value": "Theory of a Deadman", "sortKey": "theory of a deadman" },
+    { "value": "Ãnoushka Shankar", "sortKey": "anoushka shankar" }
+  ]
+}

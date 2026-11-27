@@ -1,0 +1,15 @@
+{
+  "description": "AudioQuality.codecFor + tier + describe. Lossy codecs are never labelled lossless, whatever the bitrate.",
+  "cases": [
+    { "sampleMime": "audio/flac", "fileName": "a.flac", "sampleRateHz": 96000, "bitDepth": 24, "channels": 2, "bitrateBps": 2304000, "codec": "FLAC", "tier": "HI_RES_LOSSLESS", "describe": "FLAC · 24-bit · 96 kHz · 2,304 kbps" },
+    { "sampleMime": "audio/flac", "fileName": "a.flac", "sampleRateHz": 44100, "bitDepth": 16, "channels": 2, "bitrateBps": 901000, "codec": "FLAC", "tier": "LOSSLESS", "describe": "FLAC · 16-bit · 44.1 kHz · 901 kbps" },
+    { "sampleMime": "audio/mpeg", "fileName": "a.mp3", "sampleRateHz": 44100, "bitDepth": 16, "channels": 2, "bitrateBps": 320000, "codec": "MP3", "tier": "LOSSY", "describe": "MP3 · 44.1 kHz · 320 kbps" },
+    { "sampleMime": "audio/mp4a-latm", "fileName": "a.m4a", "sampleRateHz": 48000, "bitDepth": null, "channels": 2, "bitrateBps": 256000, "codec": "AAC", "tier": "LOSSY", "describe": "AAC · 48 kHz · 256 kbps" },
+    { "sampleMime": "audio/opus", "fileName": "a.opus", "sampleRateHz": 48000, "bitDepth": null, "channels": 1, "bitrateBps": 96000, "codec": "OPUS", "tier": "LOSSY", "describe": "Opus · 48 kHz · mono · 96 kbps" },
+    { "sampleMime": "audio/raw", "containerMime": "audio/wav", "fileName": "a.wav", "sampleRateHz": 44100, "bitDepth": 16, "channels": 2, "bitrateBps": 1411200, "codec": "WAV", "tier": "LOSSLESS", "describe": "WAV · 16-bit · 44.1 kHz · 1,411 kbps" },
+    { "sampleMime": "audio/raw", "containerMime": "audio/x-aiff", "fileName": "a.aif", "sampleRateHz": 88200, "bitDepth": 24, "channels": 2, "bitrateBps": null, "codec": "AIFF", "tier": "HI_RES_LOSSLESS", "describe": "AIFF · 24-bit · 88.2 kHz" },
+    { "sampleMime": "audio/alac", "fileName": "a.m4a", "sampleRateHz": 192000, "bitDepth": 24, "channels": 6, "bitrateBps": null, "codec": "ALAC", "tier": "HI_RES_LOSSLESS", "describe": "ALAC · 24-bit · 192 kHz · 6 ch" },
+    { "sampleMime": null, "fileName": "song.m4a", "sampleRateHz": null, "bitDepth": null, "channels": null, "bitrateBps": null, "codec": "UNKNOWN", "tier": "UNKNOWN", "describe": "Unknown" },
+    { "sampleMime": null, "fileName": "x.OGG", "sampleRateHz": 22050, "bitDepth": null, "channels": 2, "bitrateBps": 64000, "codec": "VORBIS", "tier": "LOSSY", "describe": "Vorbis · 22.05 kHz · 64 kbps" }
+  ]
+}
