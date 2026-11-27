@@ -15,7 +15,12 @@ val ciRunNumber: Int = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
 
 android {
     namespace = "app.unpaused"
-    compileSdk = 37
+    // Compose 1.13 requires the 37.1 SDK extension level (a "minor" API level).
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         applicationId = "app.unpaused"
