@@ -45,7 +45,6 @@ import app.unpaused.ui.components.TrackRow
 import app.unpaused.ui.theme.LocalExtra
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @Composable
 fun SearchScreen(vm: MainViewModel, nav: NavHostController) {
@@ -105,7 +104,7 @@ fun RadioScreen(vm: MainViewModel) {
     val recent by remember { vm.c.radio.recent(10) }.collectAsStateWithLifecycle(emptyList())
     val settings by vm.settings.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-    val countryCode = Locale.getDefault().country.takeIf { it.length == 2 }
+    val countryCode = androidx.compose.ui.text.intl.Locale.current.region.takeIf { it.length == 2 }
 
     LaunchedEffect(query, tag, country) {
         delay(350)
