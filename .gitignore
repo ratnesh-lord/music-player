@@ -1,0 +1,33 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/*/build/
+android/local.properties
+android/.kotlin/
+android/captures/
+*.apk
+*.aab
+*.jks
+*.keystore
+!android/app/src/**/*.keystore
+
+# Web
+web/node_modules/
+web/dist/
+web/coverage/
+web/test-results/
+web/playwright-report/
+web/.vite/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.local
