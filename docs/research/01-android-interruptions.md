@@ -80,7 +80,7 @@ so this app is designed for Android 17's rules (F9).
 |---|---|---|---|---|---|
 | **Standard** (Android guidance) | Yes | Pause, no auto-resume | Pause, resume on gain | System ducks us | Pause and resume |
 | **Smart** (default) | Yes | Pause. Then, for up to N min (≤10, the FGS window), resume automatically once `AudioManager.isMusicActive()` has been false for 3 s. A manual pause cancels this. | Pause and resume. Option: duck instead of pause. | System ducks us | Pause and resume |
-| **Mix** (never pause for other apps) | **No** | Not applicable. Nothing is dispatched to us, so we keep playing over the game. | Not applicable | Not ducked; we lower our own volume while navigation or assistant audio is active (optional) | Pause on `MODE_RINGTONE`, `IN_CALL` or `IN_COMMUNICATION`, resume on `MODE_NORMAL` |
+| **Mix** (never pause for other apps) | **No** | Not applicable. Nothing is dispatched to us, so we keep playing over the game. | Not applicable | Not ducked: navigation prompts play over the music (lowering our own volume for them is on the roadmap, not in v1) | Pause on `MODE_RINGTONE`, `IN_CALL` or `IN_COMMUNICATION`, resume on `MODE_NORMAL` |
 
 Why Smart only resumes within 10 minutes: Media3 keeps the foreground service
 that long after a pause (F10). Android 15+ refuses focus requests from apps

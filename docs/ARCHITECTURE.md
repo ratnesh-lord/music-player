@@ -102,8 +102,10 @@ UI / notification / lock screen / headset / Bluetooth
                               │  renderers: MediaCodec audio, float output for >16-bit
                               ▼
                          AudioTrack (session id fixed per service)
+                              │  player volume: ReplayGain cut × duck × sleep fade
                               │  session effects: DynamicsProcessing (EQ,
-                              │  bass/treble, ReplayGain boost, limiter)
+                              │  bass/treble, ReplayGain boost, limiter),
+                              │  or Equalizer + BassBoost before Android 9
                               ▼
                          Android mixer → speaker / USB / Bluetooth
 ```
@@ -111,14 +113,16 @@ UI / notification / lock screen / headset / Bluetooth
 ### The focus policy (`core/focus`)
 
 A pure state machine. **Inputs:** user play/pause, focus changes, audio-mode
-changes (calls), "other audio active" checks, ticks, noisy events, and the
-foreground-service window closing. **Outputs:** commands such as
-`RequestFocus`, `AbandonFocus`, `Pause(reason)`, `Play(reason)`,
-`SetVolume(multiplier)`, `ScheduleCheck(ms)` and `Log(event)`. The Android
+changes (calls), "other audio active" checks, noisy events and settings
+changes; the Smart-mode deadline (≤ 10 min, the foreground-service window) is
+part of the state. **Outputs:** commands such as `RequestFocus`,
+`AbandonFocus`, `Pause(reason)`, `Play(reason)`, `SetDuck(volume)`,
+`ScheduleCheck(ms)` and `Log(event)`. The Android
 adapter (`AudioFocusController`) only translates between platform callbacks and
 these types, so every rule in
 [01 §4](research/01-android-interruptions.md#4-focus-modes-implemented) is
-covered by JVM unit tests.
+covered by JVM unit tests, and the adapter itself by Robolectric tests
+(`app/src/test/.../AudioFocusControllerTest.kt`).
 
 ### Recovery
 
@@ -136,20 +140,21 @@ covered by JVM unit tests.
 
 ```
 web/src
-├─ lib/db        Dexie schema (tracks, playlists, favourites, history, files, settings)
-├─ lib/import    file/folder import, music-metadata parsing, artwork thumbnails
-├─ lib/audio     AudioEngine (two <audio> elements, Web Audio graph), AIFF→WAV,
-│                ReplayGain, quality labels, Media Session
-├─ lib/sources   Radio Browser client
-├─ lib/sync      Supabase REST client + LWW merge (mirrors core/sync)
-├─ state         small store (queue, player state)
-└─ ui            design system + screens
+├─ lib/core/     trackKey, replayGain, quality, lrc, merge, aiff (ports of android/core,
+│                checked against shared/test-vectors)
+├─ lib/db.ts     Dexie schema (tracks, playlists, favourites, plays, stations, settings, handles)
+├─ lib/importer  file/folder import, music-metadata parsing, artwork thumbnails, OPFS copies
+├─ lib/engine    AudioEngine: two <audio> decks (near-gapless), Web Audio ReplayGain,
+│                10-band EQ, bass/treble, limiter; AIFF→WAV; Media Session
+├─ lib/radio     Radio Browser client (separate <audio>, no Web Audio: CORS)
+├─ lib/sync      Supabase REST client + backup (same records and merge as Android)
+└─ ui/           App (library, radio, settings, player bar, details panel), small components
 ```
 
 ## 5. Shared
 
-* `shared/design-tokens.json`: colours, type scale, spacing and motion, used by
-  both apps.
+* `shared/design-tokens.json`: colours, type faces and scale, radii and dot
+  sizes, used by both apps.
 * `shared/sync-schema.md` + `backend/supabase/migrations/*.sql`: one data model.
 * `shared/test-vectors/*.json`: fixtures that both the Kotlin and the
   TypeScript tests must pass (track keys, ReplayGain, LRC, quality labels,

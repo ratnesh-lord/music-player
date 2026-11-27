@@ -1,51 +1,57 @@
 # Roadmap, v1 scope and limitations
 
-## v1: what ships first (realistic)
+## v1: what is built
+
+Status key: **built** = implemented, compiled and unit-tested in CI; **device check** = still to be
+confirmed on a real phone with the protocol in [TESTING.md](TESTING.md).
 
 ### Android
-* **Playback reliability (primary goal)**
+* **Playback reliability (primary goal)**: built, device check pending
   * Media3 `MediaLibraryService` foreground service, media notification, lock-screen controls
-  * Focus modes: **Standard / Smart (default) / Mix**, with one-tap Mix toggle in the player
-  * Smart auto-resume after permanent focus loss (window up to 10 min); duck-instead-of-pause option for short interruptions
-  * Calls handled in every mode (focus and audio-mode listener)
-  * Headset, wired and Bluetooth buttons; pause on unplug; optional resume on reconnect (while the service is alive)
-  * Process-death recovery (queue + position), Bluetooth and System UI playback resumption, reboot resume card
-  * Diagnostics log of every interruption, labelled *expected Android behaviour* or *unexpected*
-  * Battery-optimisation status check with a shortcut to the system setting (no extra permission)
-* **Library:** MediaStore scan plus folders added with the Storage Access Framework, embedded metadata, artwork, albums, artists, genres, folders, search (FTS), playlists, favourites, history, recently added
-* **Player UI:** large artwork, dot-matrix seek bar, shuffle, repeat, queue (reorder, remove, play next), sleep timer (time or end of track), favourite, lyrics (embedded + `.lrc`)
-* **Audio:** gapless (Media3), hi-res float output toggle, 10-band EQ + bass/treble (DynamicsProcessing, falling back to Equalizer), ReplayGain track/album with pre-amp and clipping guard, optional normalisation, separate *Source quality* and *Output* panels, output-device selection (`setPreferredAudioDevice`)
-* **Formats:** FLAC, WAV, AIFF (own extractor), MP3, AAC, Ogg Vorbis, Opus; ALAC where the phone has a decoder (detected and shown)
-* **Sources:** internet radio through Radio Browser (search, favourites, now-playing title from ICY metadata)
-* **Home:** recently played, recently added, favourites, top albums/artists, "rediscover" picks from the local library
+  * Focus modes **Standard / Smart (default) / Mix**, with Mix toggles on Home, in the player and in the notification
+  * Smart auto-resume after a permanent loss (window up to 10 min); duck-instead-of-pause option for short interruptions
+  * Calls handled in every mode (focus plus audio-mode changes; polling below Android 12)
+  * Headset, wired and Bluetooth buttons; pause on unplug; optional resume on reconnect
+  * Process-death recovery (queue + position), Bluetooth and System UI playback resumption
+  * Diagnostics log of every interruption, labelled ANDROID / YOU / APP / UNEXPECTED, shareable
+  * Battery-optimisation status with a shortcut to the system setting; a banner after Android kills playback
+* **Library**: MediaStore scan plus folders added through the system picker, incremental rescans, tags and technical details read with Media3's own extractors, album artwork cache, albums, artists, genres, folders, FTS search, playlists, favourites, history, recently added and played
+* **Player UI**: artwork, dot-matrix seek bar, shuffle, repeat, queue (move, remove, play next), sleep timer (minutes or end of track, with fade), favourite, lyrics (embedded + `.lrc`, synced highlighting), output device picker
+* **Audio**: Media3 gapless, 32-bit float output for >16-bit files (toggle), 10-band EQ + bass/treble (DynamicsProcessing, Equalizer fallback, or hand-off to an external EQ app), ReplayGain track/album with pre-amp and clipping guard, optional loudness normaliser, skip silence, separate *Source* / *Output* / *Processing* panels
+* **Formats**: FLAC, WAV, AIFF/AIFF-C (own extractor), MP3, AAC, Ogg Vorbis, Opus; ALAC if the phone's decoder handles it (otherwise the error is shown)
+* **Sources**: internet radio through Radio Browser (popular, search by name/tag/country, favourites, recent, stream title from ICY metadata)
+* **Home**: interruption-mode card, recently added albums, recently played, shuffle all
 
 ### Web
-* Import files or folders (drag-and-drop, file picker, folder picker where supported); metadata and artwork parsing; library in IndexedDB; optional copy into browser storage (OPFS)
-* Albums, artists, playlists, favourites, history, search, queue, shuffle/repeat
-* Web Audio EQ + ReplayGain, Media Session controls, AIFF via in-browser WAV conversion, internet radio
-* Responsive desktop and mobile layout, installable PWA
+* Built and tested in CI (unit + Playwright), hosting needs Pages switched on
+* Add files, folders (folder handle in Chrome/Edge) or drag-and-drop; tags, artwork and lyrics parsed in the browser; library in IndexedDB; optional copies in browser storage (OPFS)
+* Songs, albums, playlists, favourites, history, search, queue, shuffle/repeat
+* Web Audio EQ + bass/treble + ReplayGain + limiter, near-gapless two-deck engine, Media Session controls, AIFF via in-browser WAV conversion, internet radio, honest quality panel
+* Installable (manifest + service worker for the app shell)
 
 ### Shared
-* JSON export/import of playlists, favourites, history and settings (works with no account)
-* Optional Supabase sync (you bring your own free project; schema and RLS policies included)
+* JSON backup of playlists, favourites and history, importable in either app (no account)
+* Optional Supabase sync with your own free project (schema and RLS policies included)
 
 ## Milestones
 
 | # | Milestone | Output | Status |
 |---|---|---|---|
 | M0 | Research + architecture | `docs/research/*`, `ARCHITECTURE.md` | done |
-| M1 | Playback core + CI | Service, focus modes, diagnostics, recovery, APK from CI | in progress |
-| M2 | Library + data | Scanners, Room, metadata enrichment, AIFF | planned |
-| M3 | UI + design system | All Android screens | planned |
-| M4 | Audio quality + DSP | EQ, ReplayGain, quality/output panels | planned |
-| M5 | Web companion | Static SPA + tests + Pages deploy | planned |
-| M6 | Sync | JSON bundles + Supabase | planned |
+| M1 | Playback core + CI | Service, focus modes, diagnostics, recovery, APK from CI | built; device check pending |
+| M2 | Library + data | Scanners, Room, metadata, artwork, AIFF | built; device check pending |
+| M3 | UI + design system | All Android screens | built; not yet seen on a device |
+| M4 | Audio quality + DSP | EQ, ReplayGain, quality/output panels | built; device check pending |
+| M5 | Web companion | Static SPA + tests + Pages deploy | built; Pages needs enabling |
+| M6 | Sync | JSON backup + Supabase | built; not yet run against a live Supabase project |
 
 ## After v1
 
 * v1.1: Internet Archive / Live Music Archive and Jamendo (your own client ID); Audius
 * v1.1: **ALAC everywhere**, by porting Apple's Apache-2.0 ALAC decoder to Kotlin as a Media3 decoder
 * v1.1: experimental **bit-perfect USB** (Android 14+ mixer attributes) where the device offers it
+* v1.1: in Mix mode, lower our own volume while navigation or assistant prompts play
+* v1.1: Home sections for favourites, top albums/artists and "rediscover"; web artists view; settings in the backup file
 * v1.2: Android Auto browsing (the library service already exposes a tree), home-screen widget, crossfade, tag editor, smart playlists
 * Later: self-hosted sync recipe (PocketBase or self-hosted Supabase)
 
@@ -73,8 +79,8 @@
 8. **ALAC** depends on a device decoder in v1, and on the web only Safari plays
    it.
 9. **Web app limits:** background playback is weaker than the native service,
-   especially for installed web apps on iOS. Gapless is best-effort. Radio
-   bypasses the EQ when stations send no CORS headers. Files are only
+   especially for installed web apps on iOS. Gapless is best-effort. Radio in
+   the browser bypasses EQ and ReplayGain (most stations send no CORS headers). Files are only
    re-readable if the browser keeps permission or you chose "keep a copy".
 10. **Radio streams** may contain the stations' own adverts. This app inserts
     none.
@@ -85,3 +91,11 @@
     dashboard.
 13. **Sideloading:** the APK is installed outside the Play Store. Android will
     ask you to allow "Install unknown apps" for your browser or file manager.
+14. **Signing:** until release-key secrets are added, CI signs with a cached
+    debug key. If GitHub evicts that cache (7 days unused), the next APK can't
+    be installed over the old one ([DEPLOYMENT.md](DEPLOYMENT.md#signing)).
+15. **Hi-res output toggle** applies the next time the player starts (the audio
+    pipeline is built once per playback session).
+16. **Lyrics** come only from your files: embedded tags and `.lrc` files in
+    folders you added through the picker (Android's media index doesn't expose
+    `.lrc` files to apps).

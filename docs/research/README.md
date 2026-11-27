@@ -11,8 +11,9 @@
 | 7 | Estimated infrastructure costs | [05-sync-and-costs.md](05-sync-and-costs.md#cost-estimate) |
 | 8 | Legal and technical limitations | [../ROADMAP.md](../ROADMAP.md#legal-and-technical-limitations-read-this) |
 | 9 | Development roadmap | [../ROADMAP.md](../ROADMAP.md#milestones) |
-| 10 | Features realistically deliverable in v1 | [../ROADMAP.md](../ROADMAP.md#v1-what-ships-first-realistic) |
+| 10 | Features realistically deliverable in v1 (now: what is built) | [../ROADMAP.md](../ROADMAP.md#v1-what-is-built) |
 | — | Web platform limits | [04-web-platform.md](04-web-platform.md) |
+| — | Device test protocol (expected Android behaviour vs app bugs) | [../TESTING.md](../TESTING.md#device-protocol-nothing-phone-2a-or-any-android-phone) |
 
 Every factual claim is labelled **[V]** (verified against the linked source),
 **[V-src]** (verified by reading Android/Media3 source code) or **[A]**
