@@ -87,7 +87,9 @@ android {
         abortOnError = true
         checkReleaseBuilds = false
         warningsAsErrors = false
-        disable += setOf("MissingTranslation", "ObsoleteLintCustomCheck", "GradleDependency", "NewerVersionAvailable")
+        // Media3 unstable APIs are opted into project-wide (-opt-in=...UnstableApi below); lint's separate
+        // androidx opt-in check doesn't see compiler opt-ins, so it is disabled here.
+        disable += setOf("MissingTranslation", "ObsoleteLintCustomCheck", "GradleDependency", "NewerVersionAvailable", "UnsafeOptInUsageError")
     }
 }
 
