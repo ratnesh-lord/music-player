@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@font-face { font-family: "Geist"; src: url("/fonts/geist.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("/fonts/geist-mono.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Doto"; src: url("/fonts/doto-bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+/* Tokens mirror android ui/theme/Theme.kt and shared/design-tokens.json. */
+@theme {
+  --color-accent: #e5322d;
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-grey-900: #0e0e0e;
+  --color-grey-850: #151515;
+  --color-grey-800: #1c1c1c;
+  --color-grey-700: #2a2a2a;
+  --color-grey-500: #6b6b6b;
+  --color-grey-400: #9a9a9a;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-dot: "Doto", "Geist Mono", monospace;
+}
+
+html, body, #root { height: 100%; }
+body { background: var(--color-ink); color: var(--color-paper); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+.label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-grey-400); }
+.dot-bg { background-image: radial-gradient(circle, var(--color-grey-700) 1.2px, transparent 1.4px); background-size: 9px 9px; }
+input[type="range"] { accent-color: var(--color-accent); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
