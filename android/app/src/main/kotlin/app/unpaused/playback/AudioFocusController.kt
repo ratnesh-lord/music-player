@@ -35,6 +35,8 @@ class AudioFocusController(
     private val diagnostics: DiagnosticsLog,
     private val status: PlaybackStatus,
     settings: FocusSettings,
+    /** Wall-clock source; injectable so tests can drive time. */
+    private val clock: () -> Long = System::currentTimeMillis,
 ) {
     private val audioManager = context.getSystemService(AudioManager::class.java)
     private val handler = Handler(Looper.getMainLooper())
@@ -200,7 +202,7 @@ class AudioFocusController(
         status.setFocus(FocusUi(mode = s.settings.mode, holdsFocus = s.focus == FocusHold.HELD, waitingFor = waiting, ducked = s.ducked))
     }
 
-    private fun now() = System.currentTimeMillis()
+    private fun now() = clock()
 
     companion object {
         private const val MODE_POLL_MS = 2_000L

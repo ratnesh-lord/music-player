@@ -85,6 +85,13 @@ fun SettingsScreen(vm: MainViewModel, nav: NavHostController) {
 @Composable
 fun InterruptionSettingsScreen(vm: MainViewModel, nav: NavHostController) {
     val s by vm.settings.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val power = remember { context.getSystemService(android.os.PowerManager::class.java) }
+    var unrestricted by remember { mutableStateOf(power?.isIgnoringBatteryOptimizations(context.packageName) == true) }
+    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {
+        unrestricted = power?.isIgnoringBatteryOptimizations(context.packageName) == true
+        onPauseOrDispose { }
+    }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
         item { ScreenTopBar("Interruptions", nav) }
         item {
@@ -139,6 +146,15 @@ fun InterruptionSettingsScreen(vm: MainViewModel, nav: NavHostController) {
             ) { v -> vm.update { it.copy(keepAliveAfterPauseMin = v.roundToInt()) } }
         }
         item { SwitchRow("Restore the queue when the app opens", null, s.restoreQueueOnLaunch) { v -> vm.update { it.copy(restoreQueueOnLaunch = v) } } }
+        item { SectionHeader("Battery") }
+        item {
+            ClickRow(
+                "Battery use: " + if (unrestricted) "Unrestricted" else "Optimised",
+                if (unrestricted) "Android won't limit Unpaused in the background."
+                else "Fine while music plays. When paused, Android may close Unpaused sooner. Tap, then choose Unrestricted for Unpaused.",
+                onClick = { runCatching { context.startActivity(Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) } },
+            )
+        }
     }
 }
 

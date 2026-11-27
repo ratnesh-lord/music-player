@@ -83,7 +83,7 @@ class Api {
   async upsert(table: string, conflict: string, rows: Record<string, unknown>[]) {
     for (let i = 0; i < rows.length; i += 500) {
       const body = rows.slice(i, i + 500).map((r) => snake({ ...r, userId: this.userId }));
-      await this.call(`${table}?on_conflict=${conflict}`, { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(body) });
+      await this.call(`${table}?on_conflict=${conflict}`, { method: "POST", headers: { Prefer: "resolution=merge-duplicates,missing=default,return=minimal" }, body: JSON.stringify(body) });
     }
   }
 

@@ -118,7 +118,8 @@ sealed interface SyncStatus {
 @OptIn(ExperimentalSerializationApi::class)
 class SyncRepository(private val db: AppDatabase, private val settings: SettingsRepository, private val http: OkHttpClient) {
 
-    private val remoteJson = Json { namingStrategy = JsonNamingStrategy.SnakeCase; ignoreUnknownKeys = true; explicitNulls = false; encodeDefaults = true }
+    // explicitNulls: PostgREST bulk inserts need every row to have the same keys.
+    private val remoteJson = Json { namingStrategy = JsonNamingStrategy.SnakeCase; ignoreUnknownKeys = true; explicitNulls = true; encodeDefaults = true }
     private val backupJson = Json { ignoreUnknownKeys = true; explicitNulls = false; encodeDefaults = true; prettyPrint = true }
     private val mutex = Mutex()
     private val _status = MutableStateFlow<SyncStatus>(SyncStatus.Idle)
@@ -353,7 +354,7 @@ class SyncRepository(private val db: AppDatabase, private val settings: Settings
                 val json = remoteJson.encodeToString(ListSerializer(serializer), chunk)
                 call(table) {
                     Request.Builder().url("${cfg.url}/rest/v1/$table?on_conflict=$conflict")
-                        .header("Prefer", "resolution=merge-duplicates,return=minimal")
+                        .header("Prefer", "resolution=merge-duplicates,missing=default,return=minimal")
                         .post(json.toRequestBody(JSON))
                 }
             }

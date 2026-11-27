@@ -1,0 +1,29 @@
+{
+  "$comment": "Unpaused design tokens. Used by android/app/.../ui/theme/Theme.kt and web/src/styles.css. Original design: monochrome, dot-matrix display type, one red accent. No third-party brand assets.",
+  "color": {
+    "accent": "#E5322D",
+    "black": "#000000",
+    "white": "#FFFFFF",
+    "grey900": "#0E0E0E",
+    "grey850": "#151515",
+    "grey800": "#1C1C1C",
+    "grey700": "#2A2A2A",
+    "grey500": "#6B6B6B",
+    "grey400": "#9A9A9A",
+    "paper": "#F3F3F1",
+    "ink": "#0A0A0A"
+  },
+  "font": {
+    "display": { "family": "Doto", "weight": 700, "use": "screen titles, big numbers; avoid colons (the glyph reads poorly)" },
+    "body": { "family": "Geist", "weights": [400, 500, 600] },
+    "mono": { "family": "Geist Mono", "weights": [400, 500], "use": "labels, technical facts (codec, rates), times" },
+    "licence": "SIL Open Font License 1.1"
+  },
+  "type": {
+    "displayLarge": 52, "displayMedium": 40, "displaySmall": 30,
+    "headlineSmall": 20, "titleMedium": 16, "titleSmall": 14,
+    "bodyMedium": 14, "bodySmall": 12, "labelMedium": 12, "labelSmall": 11
+  },
+  "radius": { "xs": 6, "sm": 10, "md": 16, "lg": 24, "pill": 999 },
+  "dot": { "gridStep": 9, "gridRadius": 1.2, "seekStep": 7, "seekRadius": 1.8, "headRadius": 4.5 }
+}
