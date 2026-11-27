@@ -9,6 +9,9 @@ import android.media.AudioManager
 import android.net.Uri
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
@@ -195,7 +198,9 @@ class UiDeviceTest {
         compose.waitUntil(10_000) { compose.onAllNodesWithText("NOW PLAYING").fetchSemanticsNodes().isNotEmpty() }
         Thread.sleep(1_500)
         shot("03-now-playing")
-        compose.onNodeWithText("AUDIO").performScrollTo().performClick()
+        // The panel tabs sit below the controls; scroll the player's list until they are composed.
+        compose.onNode(hasScrollToNodeAction()).performScrollToNode(hasText("AUDIO"))
+        compose.onNodeWithText("AUDIO").performClick()
         Thread.sleep(500)
         shot("04-audio-panel")
     }
